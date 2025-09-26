@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Classifier AI</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Classificação de Emails com IA</h1>
+    <p>Envie um arquivo (.txt/.pdf) ou cole o conteúdo do email.</p>
+  </header>
+
+  <main>
+    <form id="email-form">
+      <div class="field">
+        <label for="email-file"><strong>Arquivo:</strong></label>
+        <input type="file" id="email-file" name="file" accept=".txt,.pdf" />
+      </div>
+
+      <div class="divider">ou</div>
+
+      <div class="field">
+        <label for="email-text"><strong>Texto do email:</strong></label>
+        <textarea id="email-text" name="text" rows="10" placeholder="Cole aqui o conteúdo do email..."></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Processar</button>
+      </div>
+    </form>
+
+    <section id="results" class="hidden">
+      <h2>Resultado</h2>
+      <div class="result-item">
+        <span class="label"><strong>Categoria:</strong></span>
+        <span id="category"></span>
+      </div>
+      <div class="result-item">
+        <span class="label"><strong>Confiança:</strong></span>
+        <span id="confidence"></span>
+      </div>
+      <div class="result-item">
+        <span class="label"><strong>Resposta sugerida:</strong></span>
+        <pre id="suggested-reply"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Feito para alto volume com foco em produtividade.</small>
+  </footer>
+
+  <script>
+    const form = document.getElementById('email-form');
+    const results = document.getElementById('results');
+    const categoryEl = document.getElementById('category');
+    const confidenceEl = document.getElementById('confidence');
+    const replyEl = document.getElementById('suggested-reply');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('email-file');
+      const textInput = document.getElementById('email-text');
+
+      const formData = new FormData();
+      if (fileInput.files.length > 0) {
+        formData.append('file', fileInput.files[0]);
+      }
+      if (textInput.value.trim().length > 0) {
+        formData.append('text', textInput.value.trim());
+      }
+
+      const res = await fetch('/api/process', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      categoryEl.textContent = data.category;
+      confidenceEl.textContent = `${Math.round(data.confidence * 100)}%`;
+      replyEl.textContent = data.reply;
+      results.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
