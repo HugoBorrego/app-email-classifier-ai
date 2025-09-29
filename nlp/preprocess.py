@@ -1,4 +1,4 @@
-import re
+import re # Usado para limpeza de espaços
 import spacy
 
 _nlp = None
@@ -24,3 +24,18 @@ def preprocess_text(text: str) -> str:
         if lemma:
             tokens.append(lemma)
     return " ".join(tokens)
+
+
+""" 
+IA: Copilot
+
+Prompt: Quais bibliotecas python são usadas para leitura de arquivos (.txt/.pdf) e pré-processamento de texto para NLP?
+
+Resposta: 
+1. spaCy
+Para tokenização, lematização, remoção de stopwords, etc.
+...
+
+Prompt: Me mostre a documentação e exemplos de uso da biblioteca spaCy?
+...
+"""

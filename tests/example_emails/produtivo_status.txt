@@ -1,0 +1,33 @@
+Assunto: Erro ao acessar o sistema de relatórios
+
+Bom dia,
+
+Estou tentando acessar o módulo de relatórios desde ontem, mas aparece uma mensagem de erro: "Falha na autenticação". Já reiniciei o navegador e limpei o cache, mas o problema persiste.
+
+Poderiam verificar o que está acontecendo?
+
+Obrigado, Carlos
+
+----------------------------------------
+
+Assunto: Status da requisição #45678
+
+Olá, equipe,
+
+Gostaria de saber se há alguma atualização sobre a requisição #45678, enviada na semana passada referente à revisão contratual.
+
+Existe alguma previsão de retorno?
+
+Att., Juliana
+
+----------------------------------------
+
+Assunto: Dificuldade para gerar relatório mensal por centro de custo
+
+Boa tarde,
+
+Estou com dificuldade para gerar o relatório mensal segmentado por centro de custo no sistema.
+
+Existe algum tutorial ou passo a passo que possam me enviar?
+
+Att., Rafael

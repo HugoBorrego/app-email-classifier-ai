@@ -1,6 +1,6 @@
-from fastapi import UploadFile
-from pdfminer.high_level import extract_text as pdf_extract_text
-import chardet
+from fastapi import UploadFile # tipo de arquivo recebido via formulário
+from pdfminer.high_level import extract_text as pdf_extract_text # extrai texto de PDFs
+import chardet # detecta encoding de arquivos .txt
 
 async def read_text_from_upload(file: UploadFile | None, text: str | None) -> str:
     if text and text.strip():
@@ -22,3 +22,14 @@ async def read_text_from_upload(file: UploadFile | None, text: str | None) -> st
         return raw.decode(encoding, errors="ignore")
     except Exception:
         return raw.decode("utf-8", errors="ignore")
+
+
+
+""" 
+IA: Copilot
+
+Prompt: Mostre um código de leitura de texto txt ou pdf em python usando bibliotecas e fastapi comuns para eu usar como base em meu projeto.
+
+Resposta:
+...
+"""

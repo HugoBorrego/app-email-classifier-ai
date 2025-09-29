@@ -1,4 +1,4 @@
-import re
+import re # Usado para limpeza de espaços
 from typing import Tuple, Dict, List
 
 PRODUCTIVE_KEYWORDS = [
