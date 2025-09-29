@@ -1,51 +1,31 @@
-import re # Usado para limpeza de espaços
-from typing import Tuple, Dict, List
+import os
+from typing import Dict, Tuple
+import openai
+from dotenv import load_dotenv
 
-PRODUCTIVE_KEYWORDS = [
-    "status", "andamento", "atualização", "suporte", "pedido", "requisição",
-    "anexo", "documento", "proposta", "prazo", "urgente", "problema",
-    "erro", "falha", "chamado", "ticket", "login", "acesso", "fatura", "boleto",
-]
-UNPRODUCTIVE_KEYWORDS = [
-    "feliz natal", "boas festas", "parabéns", "agradeço", "obrigado", "grato",
-    "comunicado", "divulgação", "newsletter",
-]
+load_dotenv()
+openai.api_key = os.getenv("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")
 
-def _find_signals(text: str, keywords: List[str]) -> List[str]:
-    signals = []
-    for kw in keywords:
-        if re.search(rf"\b{re.escape(kw)}\b", text, flags=re.IGNORECASE):
-            signals.append(kw)
-    return signals
+def classify_email_with_ai(text: str) -> Tuple[str, float, Dict]:
+    prompt = (
+        "Você é um assistente que classifica emails em duas categorias: "
+        "'Produtivo' (requere ação ou resposta) e 'Improdutivo' (não requer ação imediata). "
+        "Leia o email abaixo e responda com a categoria, grau de confiança (0 a 1), e palavras-chave relevantes.\n\n"
+        f"Email:\n{text}\n\n"
+        "Responda no formato JSON:\n"
+        "{ \"categoria\": \"Produtivo\", \"confiança\": 0.85, \"sinais\": [\"status\", \"requisição\"] }"
+    )
 
-def classify_email(cleaned: str, raw_text: str) -> Tuple[str, float, Dict]:
-    prod_hits = _find_signals(raw_text, PRODUCTIVE_KEYWORDS)
-    impr_hits = _find_signals(raw_text, UNPRODUCTIVE_KEYWORDS)
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # ou "gpt-4" se disponível
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3,
+    )
 
-    score_prod = len(prod_hits)
-    score_impr = len(impr_hits)
-
-    if "?" in raw_text:
-        score_prod += 0.5
-
-    if re.search(r"\banexo(s)?\b|\bsegue(m)?\b|\banexei\b", raw_text, re.IGNORECASE):
-        score_prod += 0.7
-
-    if score_prod > score_impr:
-        category = "Produtivo"
-        confidence = min(0.5 + 0.1 * score_prod, 0.95)
-    elif score_impr > score_prod:
-        category = "Improdutivo"
-        confidence = min(0.5 + 0.1 * score_impr, 0.95)
-    else:
-
-        category = "Produtivo" if "?" in raw_text or "status" in raw_text.lower() else "Improdutivo"
-        confidence = 0.55
-
-    signals = {
-        "prod_hits": prod_hits,
-        "impr_hits": impr_hits,
-        "score_prod": score_prod,
-        "score_impr": score_impr,
-    }
-    return category, confidence, signals
+    import json
+    try:
+        content = response["choices"][0]["message"]["content"]
+        result = json.loads(content)
+        return result["categoria"], result["confiança"], {"sinais": result.get("sinais", [])}
+    except Exception as e:
+        return "Indefinido", 0.0, {"erro": str(e)}
