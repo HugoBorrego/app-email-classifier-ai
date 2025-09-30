@@ -1,8 +1,12 @@
 fastapi==0.115.0
-uvicorn[standard]==0.30.0
+uvicorn==0.30.0
 jinja2==3.1.4
 python-multipart==0.0.9
-spacy==3.7.5
 pdfminer.six==20231228
 chardet==5.2.0
 scikit-learn==1.5.1
+openai==1.23.6
+python-dotenv==1.0.1
+textblob==0.18.0
+nltk==3.8.1
+blis==0.7.9
