@@ -47,3 +47,6 @@ async def process_email(file: UploadFile | None = None, text: str | None = Form(
         "reply": reply,
         "signals": signals,
     }
+
+port = int(os.environ.get("PORT", 5000))
+app.run(host='0.0.0.0', port=port)
