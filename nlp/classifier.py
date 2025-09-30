@@ -4,7 +4,11 @@ import openai
 from dotenv import load_dotenv
 
 load_dotenv()
-openai.api_key = os.getenv("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")
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY não está definida no ambiente.")
+openai.api_key = api_key
+
 
 def classify_email_with_ai(text: str) -> Tuple[str, float, Dict]:
     prompt = (
