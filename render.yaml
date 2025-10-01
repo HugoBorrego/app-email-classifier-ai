@@ -3,10 +3,6 @@ services:
     name: email-classifier-ai
     env: python
     buildCommand: |
-      pip install --upgrade pip setuptools wheel maturin
-      export CARGO_HOME=$HOME/.cargo
-      export RUSTUP_HOME=$HOME/.rustup
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-      source $HOME/.cargo/env
-      pip install -r requirements.txt
+      pip install --upgrade pip setuptools wheel
+      pip install --only-binary=:all: -r requirements.txt
     startCommand: gunicorn app:app
