@@ -29,14 +29,3 @@ async def read_text_from_upload(file: UploadFile | None, text: str | None) -> st
     except Exception:
         return raw.decode("utf-8", errors="ignore")
 
-
-
-
-""" 
-IA: Copilot
-
-Prompt: Mostre um código de leitura de texto txt ou pdf em python usando bibliotecas e fastapi comuns para eu usar como base em meu projeto.
-
-Resposta:
-...
-"""
