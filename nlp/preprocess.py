@@ -1,22 +1,24 @@
 import re
-from textblob import TextBlob
 import nltk
 from nltk.corpus import stopwords
 import string
 
-nltk.download('punkt')
-nltk.download('stopwords')
+try:
+    stopwords.words("portuguese")
+except LookupError:
+    nltk.download("stopwords")
+    nltk.download("punkt")
 
 def preprocess_text(text: str) -> str:
     if not text:
         return ""
+
     text = text.lower().strip()
     text = re.sub(r"\s+", " ", text)
 
-    blob = TextBlob(text)
-    tokens = blob.words
+    tokens = nltk.word_tokenize(text, language="portuguese")
 
-    stop_words = set(stopwords.words('portuguese'))
+    stop_words = set(stopwords.words("portuguese"))
     cleaned_tokens = [
         word for word in tokens
         if word not in stop_words and word not in string.punctuation

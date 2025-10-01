@@ -1,6 +1,8 @@
 from datetime import datetime
 
 def suggest_reply(category: str, raw_text: str, signals: dict) -> str:
+    text_lower = raw_text.lower()
+
     if category == "Improdutivo":
         return (
             "Olá!\n\n"
@@ -10,7 +12,7 @@ def suggest_reply(category: str, raw_text: str, signals: dict) -> str:
             "Atenciosamente,\nEquipe de Atendimento"
         )
 
-    if "status" in raw_text.lower() or "andamento" in raw_text.lower() or "atualização" in raw_text.lower():
+    if any(word in text_lower for word in ["status", "andamento", "atualização"]):
         return (
             "Olá!\n\n"
             "Recebemos sua solicitação de status e estamos verificando o andamento junto ao time responsável. "
@@ -19,7 +21,7 @@ def suggest_reply(category: str, raw_text: str, signals: dict) -> str:
             "Atenciosamente,\nEquipe de Atendimento"
         )
 
-    if "anexo" in raw_text.lower() or "segue" in raw_text.lower():
+    if any(word in text_lower for word in ["anexo", "segue"]):
         return (
             "Olá!\n\n"
             "Confirmamos o recebimento do(s) anexo(s). Vamos validar o conteúdo e dar sequência ao processamento. "
@@ -27,7 +29,7 @@ def suggest_reply(category: str, raw_text: str, signals: dict) -> str:
             "Atenciosamente,\nEquipe de Atendimento"
         )
 
-    if "erro" in raw_text.lower() or "falha" in raw_text.lower() or "problema" in raw_text.lower():
+    if any(word in text_lower for word in ["erro", "falha", "problema"]):
         return (
             "Olá!\n\n"
             "Lamentamos pelo inconveniente. Para acelerar o diagnóstico, poderia nos enviar:\n"

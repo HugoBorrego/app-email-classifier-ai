@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 from utils.file_reader import read_text_from_upload
 from nlp.preprocess import preprocess_text
 from nlp.responder import suggest_reply
-from nlp.classifier import classify_email_with_ai
+from nlp.classifier import classify_email_with_transformers
 
 app = FastAPI(title="Email Classifier AI", version="0.1.0")
 
@@ -27,17 +27,17 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/api/process")
-async def process_email(file: UploadFile | None = None, text: str | None = Form(default=None)):
+async def process_email(file: UploadFile = None, text: str = Form(default=None)):
     # 1. Lê o conteúdo do email (arquivo ou texto)
     raw_text = await read_text_from_upload(file, text)
 
     # 2. Pré-processa o texto (limpeza, lematização)
     cleaned = preprocess_text(raw_text)
 
-    # 3. Classifica com IA (OpenAI ou outro modelo)
-    category, confidence, signals = classify_email_with_ai(raw_text)
+    # 3. Classifica com IA
+    category, confidence, signals = classify_email_with_transformers(raw_text)
 
-    # 4. Gera resposta automática com base na categoria
+    # 4. Gera resposta automática
     reply = suggest_reply(category, raw_text, signals)
 
     # 5. Retorna os resultados
@@ -46,7 +46,5 @@ async def process_email(file: UploadFile | None = None, text: str | None = Form(
         "confidence": confidence,
         "reply": reply,
         "signals": signals,
+        "cleaned_text": cleaned,
     }
-
-port = int(os.environ.get("PORT", 5000))
-app.run(host='0.0.0.0', port=port)
